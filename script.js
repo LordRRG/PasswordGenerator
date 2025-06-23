@@ -4,6 +4,7 @@ import { LOWERCASE, UPPERCASE, NUMBERS, SYMBOLS, EXTENDED_SYMBOLS } from "./char
 // The JS code for generating random passwords
 
 let pool = [];
+let password = [];
 
 function makePassword() {
     // Based on user preferences, create a pool of characters from which characters can be pulled.
@@ -40,7 +41,18 @@ function makePassword() {
         }
     }
     console.log(pool);
+
+    // Take random characters from the pool.
+    const passwordLength = Number(document.getElementById("length").value);
+    console.log(passwordLength);
+    for(let i = 0; i < passwordLength; i++) {
+        // Append random values from the pool array for each character to be added to the user's generated password.
+        password[i] = pool[Math.floor(Math.random() * pool.length)];
+    }
+    console.log(password);
 }
+
+// The validate function determines whether the user's input is valid for computing to generate a password
 
 function validate() {
     const useSymbols = document.getElementById("symbols").checked;
