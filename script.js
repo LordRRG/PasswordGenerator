@@ -101,14 +101,18 @@ function validate() {
         alert("Please select at least one character type.");
         return false;
     } else {
-        loader.style.display = "block";
+        const PasswordCount = Number(document.getElementById("numPasswords").value);
 
-        const password = makePassword(); // Get the password from the return value
+        for(let i = 0; i < PasswordCount; i++) {
+            loader.style.display = "block";
 
-        setTimeout(() => {
-            loader.style.display = "none";
-            displayPassword(password); // Pass it as an argument
-        }, 1500);
+            const password = makePassword(); // Get the password from the return value
+
+            setTimeout(() => {
+                loader.style.display = "none";
+                displayPassword(password); // Pass it as an argument
+            }, 1500);
+        }
     }
 }
 
