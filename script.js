@@ -3,9 +3,22 @@ import { LOWERCASE, UPPERCASE, NUMBERS, SYMBOLS, EXTENDED_SYMBOLS } from "./char
 
 // The JS code for generating random passwords
 
-
+function clearPasswords() {
+    const passwordList = document.querySelector(".passwords");
+    const clearBtn = document.getElementById("clearBtn");
+    passwordList.innerHTML = "";
+    const msg = document.createElement("li");
+    msg.textContent = "No passwords saved yet.";
+    msg.classList.add("no-passwords");
+    passwordList.appendChild(msg);
+    localStorage.removeItem("savedPasswords");
+    if (localStorage.getItem("savedPasswords") === null) {
+        clearBtn.disabled = true;
+    }
+}
 
 function makePassword() {
+    clearPasswords();
     let pool = [];
     let password = [];
     // Based on user preferences, create a pool of characters from which characters can be pulled.
@@ -116,19 +129,7 @@ function validate() {
     }
 }
 
-function clearPasswords() {
-    const passwordList = document.querySelector(".passwords");
-    const clearBtn = document.getElementById("clearBtn");
-    passwordList.innerHTML = "";
-    const msg = document.createElement("li");
-    msg.textContent = "No passwords saved yet.";
-    msg.classList.add("no-passwords");
-    passwordList.appendChild(msg);
-    localStorage.removeItem("savedPasswords");
-    if (localStorage.getItem("savedPasswords") === null) {
-        clearBtn.disabled = true;
-    }
-}
+
 
 // Add event listener to the button
 document.addEventListener("DOMContentLoaded", () => {
