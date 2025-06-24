@@ -52,6 +52,23 @@ function makePassword() {
     console.log(password);
 }
 
+function displayPassword() {
+    const passwordList = document.querySelector(".passwords");
+    const emptyMsg = document.querySelector(".no-passwords");
+    if (emptyMsg) {
+        emptyMsg.remove();
+    }
+    const finalPassword = password.join("");
+    const li = document.createElement("li");
+    li.textContent = finalPassword;
+    passwordList.appendChild(li);
+
+    // Save the password to the local storage:
+    let stored = JSON.parse(localStorage.getItem("savedPasswords")) || [];
+    stored.push(finalPassword);
+    localStorage.setItem("savedPasswords", JSON.stringify(stored));
+}
+
 // The validate function determines whether the user's input is valid for computing to generate a password
 
 function validate() {
@@ -72,15 +89,40 @@ function validate() {
         return false;
     } else {
         makePassword();
+
+        loader.style.display = "block";
         console.log("The user has entered valid values!");
+        setTimeout(() => {
+            loader.style.display = "none";
+
+            displayPassword();
+        }, 1500);
     }
 }
 
-// ✅ Add event listener to the button
+
+
+// Add event listener to the button
 document.addEventListener("DOMContentLoaded", () => {
-    const generateBtn = document.querySelector("button");
+    const generateBtn = document.getElementById("generateBtn");
     generateBtn.addEventListener("click", (e) => {
         e.preventDefault(); // Prevent form submission/reload
         validate();
     });
+
+    const stored = JSON.parse(localStorage.getItem("savedPasswords")) || [];
+    const passwordList = document.querySelector(".passwords");
+
+    if (stored.length === 0) {
+        const msg = document.createElement("li");
+        msg.textContent = "No passwords saved yet.";
+        msg.classList.add("no-passwords");
+        passwordList.appendChild(msg);
+    } else {
+        stored.forEach(pwd => {
+            const li = document.createElement("li");
+            li.textContent = pwd;
+            passwordList.appendChild(li);
+        });
+    }
 });
