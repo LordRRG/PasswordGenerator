@@ -56,15 +56,16 @@ function makePassword() {
         clearBtn.disabled = false;
     }
     console.log(password);
+    return password;
 }
 
-function displayPassword() {
+function displayPassword(passwordArray) {
     const passwordList = document.querySelector(".passwords");
     const emptyMsg = document.querySelector(".no-passwords");
     if (emptyMsg) {
         emptyMsg.remove();
     }
-    const finalPassword = password.join("");
+    const finalPassword = passwordArray.join("");
     const li = document.createElement("li");
     li.textContent = finalPassword;
     passwordList.appendChild(li);
@@ -90,18 +91,23 @@ function validate() {
         useLowercase
     });
 
+    const length = Number(document.getElementById("length").value);
+    if (length < 8 || length > 16) {
+        alert("Please enter a password length between 8 and 16.");
+        return false;
+    }
+
     if (!useSymbols && !useNumbers && !useUppercase && !useLowercase) {
         alert("Please select at least one character type.");
         return false;
     } else {
-        makePassword();
-
         loader.style.display = "block";
-        console.log("The user has entered valid values!");
+
+        const password = makePassword(); // Get the password from the return value
+
         setTimeout(() => {
             loader.style.display = "none";
-
-            displayPassword();
+            displayPassword(password); // Pass it as an argument
         }, 1500);
     }
 }
@@ -143,7 +149,7 @@ document.addEventListener("DOMContentLoaded", () => {
             passwordList.appendChild(li);
         });
     }
-    
+
     const clearBtn = document.getElementById("clearBtn");
     clearBtn.addEventListener("click", (e) => {
         e.preventDefault();
