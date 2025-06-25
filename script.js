@@ -1,6 +1,8 @@
 // Import arrays from charset.js
 import { LOWERCASE, UPPERCASE, NUMBERS, SYMBOLS, EXTENDED_SYMBOLS } from "./charset.js";
 
+let textData = [];
+
 // The JS code for generating random passwords
 
 function clearPasswords() {
@@ -120,6 +122,7 @@ function validate() {
             loader.style.display = "block";
 
             const password = makePassword(); // Get the password from the return value
+            textData[i] = password;
 
             setTimeout(() => {
                 loader.style.display = "none";
@@ -129,7 +132,25 @@ function validate() {
     }
 }
 
+function downloadText() {
+    // Take the values from the multiple passwords created and save them as data
+    /* Test: */ console.log(textData);
+    let textFile = "Passwords\n";
+    for(let i = 0; i < textData.length; i++) {
+        // Add each password saved in the text data array
+        textFile += textData[i] + "\n";
+    }
+    const blob = new Blob([textFile], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
 
+    // Trigger a click with a temporary <a> element
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "passwords.txt";
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+}
 
 // Add event listener to the button
 document.addEventListener("DOMContentLoaded", () => {
@@ -160,4 +181,10 @@ document.addEventListener("DOMContentLoaded", () => {
         e.preventDefault();
         clearPasswords();
     });
+
+    const exportBtn = document.getElementById("export");
+    exportBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+        downloadText();
+    })
 });
